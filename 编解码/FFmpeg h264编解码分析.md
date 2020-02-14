@@ -52,5 +52,43 @@
     输出161
     验证了我们的理论baseline profile包含0个B帧，而high profile包含B帧。
   
+  - **sc_threshold**
+  
+    FFmpeg可以通过参数-g设置帧数间隔为GOP的长度，但是遇到场景切换的时候，从一个画面突然变为另一个画面时，会强行插入一个关键帧，这时GOP的长度会重新开始。可以通过参数sc_threshold决定是否在场景切换的时候插入关键帧。执行命令控制编码时GOP的大小。
+  
+    - ./ffmpeg -i input.mp4 -c:v libx264 -g 50 -t 60 output.mp4   遇到场景切换会插入I帧
+    - ./ffmpeg -i input.mp4 -c:v libx264 -g 50 -sc_threshold 0 -t 60 output.mp4  遇到场景切换不会插入I帧
+  
+  - **x264opts**
+  
+    由于FFmpeg设置x264参数时增加的参数比较多，FFmpeg开放了x264opts，可以通过这个参数设置x264的内部私有参数，如设置IBP帧的顺序以及规律。下面列举在上面生成的GOP文件数据分析基础上控制生成的文件不出现B帧，只要设置x264内部参数bframes=0即可：
+  
+    - ./ffmpeg -i input.mp4 -c:v libx264 -x264opts "bframes=0" -g 50 -sc_threshold 0 -t 60 output.mp4  
+  
+    如果希望控制I帧P帧B帧的频率和规律，可以通过控制GOP中B帧的帧数来实现，P帧的频率可以通过x264的参数b-adapt进行设置。
+    例如设置GOP中，每2个P帧之间存放3个B帧：
+  
+    - ./ffmpeg -i input.mp4 -c:v libx264 -x264opts "bframes=3:b-adapt=0" -g 50 -sc_threshold 0 -t 60 output.mp4
+  
+  - **nal-hrd**
+  
+    编码可以设置VBR，CBR的编码模式，VBR为可变码率，CBR为恒定码率。互联网上VBR居多，但是我们可以使用FFmpeg制作CBR码率视频。
+  
+    - ffmpeg -i input.mp4 -c:v libx264 -x264opts "bframes=10:b-adapt=0" -b:v 1000k -maxrate 1000k -minrate 1000k -bufsize 50k -nal-hrd cbr -g 50 -sc_threshold 0 -t 60 output.ts
+      命令执行参数介绍
+      - 设置B帧个数，每两个P帧之间包含10个B帧
+      - 设置视频码率为1000kbit/s
+      - 设置最大码率为1000kbit/s
+      - 设置最小码率为1000kbit/s
+      - 设置编码的buffer大小为50KB
+      - 设置H.264的编码HRD信号为CBR
+      - 设置每50帧一个GOP
+      - 设置场景切换不强行插入关键帧
+      - 设置视频输出时间为60s
     
+  - 硬编解码
+  
+    测试命令：ffmpeg -vcodec h264_vda -i input.mp4 -vcodec h264_videotoolbox -b:v 2000k output.mp4
+  
+    windows环境编译繁琐，暂没成功，暂无环境测试
 
