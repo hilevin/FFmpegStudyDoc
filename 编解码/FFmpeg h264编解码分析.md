@@ -1,4 +1,4 @@
-- ffmpeg x264 编码参数对照表:[网址](https://blog.csdn.net/byxdaz/article/details/80663718)
+- ffmpeg x264 编码参数对照表:[参考网址](https://blog.csdn.net/byxdaz/article/details/80663718)
 
 - 
 
@@ -86,9 +86,26 @@
       - 设置场景切换不强行插入关键帧
       - 设置视频输出时间为60s
     
-  - 硬编解码
+  - **硬编解码加速**
   
     测试命令：ffmpeg -vcodec h264_vda -i input.mp4 -vcodec h264_videotoolbox -b:v 2000k output.mp4
   
     windows环境编译繁琐，暂没成功，暂无环境测试
-
+    
+    **英伟达gpu硬件加速版本FFmpeg编译文档**（此文档当前目录下面）：	
+    
+    ​	Using_FFmpeg_with_NVIDIA_GPU_Hardware_Acceleration_v01.4.pdf
+    
+    文档里面有windows和linux版本编译方法，和相关命令的使用方法
+    
+    
+    
+    **下载编译好的ffmpeg**：[下载地址](https://ffmpeg.zeranoe.com/builds/win64/static/ffmpeg-20200213-6d37ca8-win64-static.zip)
+    
+    - ./ffmpeg -y -vsync 0 -hwaccel cuvid -c:v h264_cuvid -i ./video-h265.mkv -vf
+      scale_cuda=1280:720 -c:a copy -c:v h264_nvenc -b:v 5M ./video-h265-1.mp4  
+    
+      测试结果：scale_cuda参数不支持
+    
+  
+- FFmpeg X264 参数源码分析
