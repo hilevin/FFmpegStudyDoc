@@ -20,10 +20,21 @@
 
     OptionsContext结构体持有OptionGroup 指针。
 
-    - 方法：static int open_input_file(OptionsContext *o, const char *filename)
-      - 根据参数设置情况修正参数
+    - 方法：static int **open_input_file**(OptionsContext *o, const char *filename) 打开输入文件
+      - 根据参数设置情况修正并设置参数
       - 调用：**avformat_open_input**(&ic, filename, file_iformat, &o->g->**format_opts**); 传入OptionGroup 中format_opts。
-    - 
+      - 调用：add_input_streams 获取流信息并加到输入流数组中
+        - 调用：avcodec_alloc_context3 根据某路流对应的编码器创建新的AVCodecContext
+        - 调用：avcodec_parameters_to_context 获取新某路流对应的编码器参数给新创建的AVCodecContext
+        - 调用：filter_codec_opts 获取解码器选项参数
+        - 解析**帧率、硬件加速**等相关参数
+        - 调用：avcodec_parameters_from_context 参数设置给编码器的参数
+    - 方法：**init_complex_filters** 解析滤镜相关参数
+    - 方法： int **open_output_file**(OptionsContext *o, const char *filename) 打开输出文件
+      - 根据参数设置情况修正并设置参数
+      - 循环初始化滤镜组
+        - 调用：init_output_filter
+      - 调用：new_video_stream 根据输入文件最高分辨率创建对应的输出流
 
 - **参数相关结构体**
 
