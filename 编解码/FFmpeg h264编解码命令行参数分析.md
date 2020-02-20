@@ -1,6 +1,6 @@
 - ffmpeg x264 编码参数对照表:[参考网址](https://blog.csdn.net/byxdaz/article/details/80663718)
 
-- 
+- ffmpeg x264官方参数文档：https://www.ffmpeg.org/ffmpeg-codecs.html#libx264_002c-libx264rgb
 
 - **ffmpeg 编解码命令参数** [参考网址](https://blog.csdn.net/Lyman_Ye/article/details/80305904)
   
@@ -107,5 +107,15 @@
     
       测试结果：scale_cuda参数不支持
     
+  - **X264私有参数设置方法**
   
-- FFmpeg X264 参数源码分析
+    ./ffmpeg -i ../../../testFiles/E1.mp4 -c:v libx264 -x264-params level=30:bframes=0:weightp=0:\
+    cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:\
+    no-fast-pskip=1:subq=6:8x8dct=0:trellis=0 ../../../testFiles/E1_x264_params.mp4
+  
+- **FFmpeg其他测试命令**
+
+  - 视频文件插入B帧
+
+    ./ffmpeg -i ../../../testFiles/E1.mp4 -c:v libx264 -x264opts "bframes=10:b-adapt=0" -b:v 3000k -maxrate 3000k -minrate 3000k  -nal-hrd cbr -g 50 -sc_threshold 0 -t 60 ../../../testFiles/E1_had_b.ts
+
