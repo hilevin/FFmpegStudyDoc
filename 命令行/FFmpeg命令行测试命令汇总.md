@@ -1,11 +1,9 @@
 ## FFmpeg测试命令汇总
 
 - **测试命令**
-  - libavutil 库工具
+  - 统计B/I/P帧数目
     
-    - 统计B/I/P帧数目
-    
-      ffprobe -v quiet -show_frames transcoded123.mp4 | grep "pict_type=B" | wc -l
+    ffprobe -v quiet -show_frames transcoded123.mp4 | grep "pict_type=B" | wc -l
     
   - 编解码
   
@@ -68,10 +66,6 @@
       ffmpeg -r 1 -i input.m2v -r 24 output.avi
       ```
   
-    - 
-  
-  - 比特流过滤器
-  
   - 封装格式
   
     - srt推拉流
@@ -83,6 +77,8 @@
     - map使用
   
       `./ffmpeg -re -i ./E1.mp4 -i ./Record-null.ts -map 0:0 -map 0:1 -map 1:0 -map 1:1 -c copy -program title=CCTV1:program_num=1:st=0:st=1 -program title=CCTV2:program_num=2:st=2:st=3 -f mpegts "udp://192.168.2.34:1234?pkt_size=1316"`
+  
+      选择流例如-map 0:1:表面第1个输入文件的第二个流
   
     - 转封装
   
@@ -101,4 +97,10 @@
     - 视频转个分辨率
   
       ./ffmpeg -i ../testFiles/E1.mp4 -vf scale=640:360 ../testFiles/E1_640_360.mp4
+    
+    
+    
+    
+
+
 
