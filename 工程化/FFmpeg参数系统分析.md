@@ -74,47 +74,41 @@
 
 - **参数相关结构体**
 
+  - **结构体**：**AVDictionary**
   - **结构体：AVOption**
   - 编码器
     -  每种编码都有一个静态AVOption数组，保存了支持的参数及设置参数的规则
   
     - 封装器
+  - **结构体：AVClass**
+    
+    - 持有AVOption指针
+  - **结构体：AVCodec**
+    
+    - 持有AVClass指针
+    
+    - init 方法：初始化为对应的编码器初始化方法
+        - 方法中使用AVCodecContext中编解码相关参数初始化指定编码器的参数
+  - **结构体：AVCodecContext**
+    
+    - 持有AVCodec指针
+      - void *priv_data 保存对应编码器实现的指针
+      - **编码解码相关参数**
+  - **结构体：AVStream**
   
-- **结构体：AVClass**
-  
-  - 持有AVOption指针
-  
-- **结构体：AVCodec**
-  
-  - 持有AVClass指针
-  
-  - init 方法：初始化为对应的编码器初始化方法
-      - 方法中使用AVCodecContext中编解码相关参数初始化指定编码器的参数
-  
-- **结构体：AVCodecContext**
-  
-  - 持有AVCodec指针
-    - void *priv_data 保存对应编码器实现的指针
-    - **编码解码相关参数**
-  
-- **结构体：AVStream**
-
-  - 持有AVCodecContext指针
-
-- **结构体：AVInputFormat**
-  
-  - 持有AVClass指针：priv_class，保存对应输入流的封装协议参数
-  
-- **结构体：AVOutputFormat**
-  
-  - 持有AVClass指针：priv_class，保存对应输入流的封装协议参数
-  
-- **结构体：AVFormatContext**
-  
-  - 持有AVClass指针
-    - 值为avformat_options 定义在libavcodec/options_table.h文件中，定义了封装格式所支持的所有参数
-  - 持有AVInputFormat：解封装时才有
-  - 持有AVOutputFormat：封装时才有
+    - 持有AVCodecContext指针
+  - **结构体：AVInputFormat**
+    
+    - 持有AVClass指针：priv_class，保存对应输入流的封装协议参数
+  - **结构体：AVOutputFormat**
+    
+    - 持有AVClass指针：priv_class，保存对应输入流的封装协议参数
+  - **结构体：AVFormatContext**
+    
+    - 持有AVClass指针
+      - 值为avformat_options 定义在libavcodec/options_table.h文件中，定义了封装格式所支持的所有参数
+    - 持有AVInputFormat：解封装时才有
+    - 持有AVOutputFormat：封装时才有
   
 - **参数相关方法及流程**
 
@@ -151,11 +145,7 @@
 
 
 
-## 参数设置总结
+## AVOptions  
 
-- 全局参数，封装格式参数，编解码参数，数据繁多，官网有详解介绍
-- 解封装
-  - 一般情况下无论是使用命令行还是编写解封装代码avformat_open_input无需指定Options，avformat_open_input内存会使用默认参数探测输入文件的封装格式信息
-- 封装
-- 
+- 官网详细介绍网址：[AVOptions](https://www.ffmpeg.org/ffmpeg.html#toc-AVOptions)
 

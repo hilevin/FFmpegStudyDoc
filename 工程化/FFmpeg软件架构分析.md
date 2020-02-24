@@ -88,3 +88,10 @@
   - **AVHWAccel** ：编解码硬件加速相关
 
   - **AVCodecParameters** ：编解码相关参数
+  
+- 关系图
+
+  ![img](https://img-blog.csdn.net/20130914204051125?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center)
+
+- 参考源代码：git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg
+- 参考网址：https://blog.csdn.net/leixiaohua1020/article/details/11693997
