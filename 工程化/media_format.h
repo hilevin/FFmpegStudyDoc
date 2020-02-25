@@ -12,6 +12,21 @@ public:
 };
 using PacketPtr = std::shared_ptr<Packet>();
 
+class KiloviewPacket : public Packet {
+public:
+	KiloviewPacket() {
+
+	}
+	~KiloviewPacket() {
+		if (packet) {
+			av_packet_free(&packet);
+		}
+	}
+
+
+	AVPacket* packet;
+};
+using KiloviewPacketPtr = std::shared_ptr<KiloviewPacket>();
 
 class FFmpegPacket : public Packet {
 public:
